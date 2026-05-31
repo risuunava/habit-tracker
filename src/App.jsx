@@ -3,6 +3,7 @@ import { useAuthState } from "./hooks/useAuth";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import AddHabit from "./pages/AddHabit";
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuthState();
@@ -53,6 +54,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/habit/new"
+          element={
+            <PrivateRoute>
+              <AddHabit />
             </PrivateRoute>
           }
         />

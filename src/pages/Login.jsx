@@ -1,42 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { loginWithEmail, loginWithGoogle } from "../hooks/useAuth";
 
-// ── Icon components ──────────────────────────────────────────
-function GoogleIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
-      <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
-      <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/>
-      <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
-    </svg>
-  );
-}
-
-function EyeIcon({ show }) {
-  return show ? (
-    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-      <line x1="1" y1="1" x2="23" y2="23"/>
-    </svg>
-  ) : (
-    <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-      <circle cx="12" cy="12" r="3"/>
-    </svg>
-  );
-}
-
-// ── Login Page ───────────────────────────────────────────────
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showEmailLogin, setShowEmailLogin] = useState(false);
+
+  useEffect(() => {
+    // Add fade-in animation
+    const elements = document.querySelectorAll('.animate-fade-in');
+    elements.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(-20px)';
+      setTimeout(() => {
+        el.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+        el.style.opacity = '1';
+        el.style.transform = 'translateX(0)';
+      }, 100);
+    });
+  }, []);
 
   const friendlyError = (code) => {
     const map = {
@@ -77,154 +63,182 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f1117] flex">
-      {/* Left panel — branding */}
-      <div className="hidden lg:flex flex-col justify-between w-[420px] bg-[#111] border-r border-white/5 p-12">
-        {/* Logo */}
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#1D9E75] flex items-center justify-center">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </div>
-          <span className="text-white font-semibold tracking-tight">HabitTracker</span>
+    <div className="font-body-md text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed overflow-x-hidden min-h-screen">
+      {/* Top Navigation */}
+      <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl flex justify-between items-center px-container-padding py-4">
+        <div className="text-headline-md font-bold text-primary">Habit Tracker</div>
+        <div className="flex items-center gap-4">
+          <Link to="/register" className="px-6 py-2 bg-surface-container-high text-on-surface rounded-full text-label-md hover:bg-surface-container-highest transition-colors font-bold">
+            Daftar Gratis
+          </Link>
         </div>
+      </header>
 
-        {/* Quote */}
-        <div>
-          <div className="w-10 h-[2px] bg-[#1D9E75] mb-6" />
-          <p className="text-2xl font-light text-white leading-relaxed mb-6">
-            Kebiasaan kecil yang<br />
-            <span className="text-[#1D9E75] font-semibold">konsisten</span> menghasilkan<br />
-            perubahan besar.
-          </p>
-          <div className="flex items-center gap-3 mt-8">
-            {[7, 30, 100].map((n) => (
-              <div key={n} className="flex flex-col items-center bg-white/5 rounded-xl px-4 py-3 border border-white/5">
-                <span className="text-[#1D9E75] font-bold text-lg">{n}</span>
-                <span className="text-gray-500 text-xs mt-0.5">hari</span>
+      <main className="pt-24 pb-32">
+        {/* Hero Section */}
+        <section className="px-container-padding py-section-margin max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Left Column */}
+            <div className="space-y-8 animate-fade-in">
+              <div className="space-y-4">
+                <span className="inline-block px-4 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed text-label-md uppercase tracking-wider">Mindful Lifestyle</span>
+                <h1 className="text-display-lg lg:text-[56px] text-on-background leading-tight">
+                  Your path to clarity begins with <span className="text-primary italic">intention</span>.
+                </h1>
+                <p className="text-body-lg text-on-surface-variant max-w-lg">
+                  Transform your daily routine into a series of mindful victories. No pressure, no stress—just growth at your own pace.
+                </p>
               </div>
-            ))}
-          </div>
-          <p className="text-gray-600 text-sm mt-3">Milestone streak yang menanti kamu</p>
-        </div>
 
-        <p className="text-gray-700 text-xs">© 2026 HabitTracker</p>
-      </div>
+              {error && (
+                <div className="px-4 py-3 rounded-xl bg-error-container text-on-error-container text-body-md border border-error/20">
+                  {error}
+                </div>
+              )}
 
-      {/* Right panel — form */}
-      <div className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-sm">
-          {/* Mobile logo */}
-          <div className="flex items-center gap-2 mb-10 lg:hidden">
-            <div className="w-7 h-7 rounded-lg bg-[#1D9E75] flex items-center justify-center">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="white" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </div>
-            <span className="text-white font-semibold">HabitTracker</span>
-          </div>
+              {showEmailLogin ? (
+                <form onSubmit={handleEmail} className="bg-surface-container-lowest p-6 rounded-2xl soft-shadow border border-surface-variant max-w-sm">
+                  <h3 className="text-headline-md mb-4 text-primary">Login Email</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-label-sm text-on-surface-variant mb-1">Email</label>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="w-full px-4 py-3 rounded-xl bg-surface-container-low border-none text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary focus:outline-none transition-all"
+                        placeholder="kamu@email.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-label-sm text-on-surface-variant mb-1">Password</label>
+                      <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="w-full px-4 py-3 rounded-xl bg-surface-container-low border-none text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary focus:outline-none transition-all"
+                        placeholder="••••••••"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={loading || googleLoading}
+                      className="w-full flex items-center justify-center py-3 bg-primary text-on-primary rounded-full text-label-md hover:brightness-110 active:scale-95 transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
+                    >
+                      {loading ? "Memproses..." : "Masuk Sekarang"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowEmailLogin(false)}
+                      className="w-full py-2 text-label-sm text-on-surface-variant hover:text-primary transition-colors mt-2"
+                    >
+                      Kembali
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={handleGoogle}
+                    disabled={googleLoading || loading}
+                    className="flex items-center justify-center gap-3 px-8 py-4 bg-primary text-on-primary rounded-full text-label-md hover:brightness-110 active:scale-95 transition-all soft-shadow shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
+                  >
+                    <img alt="Google" className="w-5 h-5 bg-white rounded-full p-0.5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ04XAuUvckcAXQYXelWO18C04ot2Wbx0Ta-mn8kpeO29N5sM97h5T-Hp0tHpIZSSR58BzS8ne9rkzISkAOxuvtsbjrXIGpblwrvmeNMyD-szJBrL50z1a1GxVA4Hp6h-RdVs4iMJk5O4I4-Mxv42p4k-sEKI7MgetDMS5FYi5jRQyHuFBi3Lh1uuyLDb7CWbY9UGk0c1oGQggndYPzCpoRjBZt6uwwa6WlFwt52Byj1sw79_u4tg1I-5wqvJ9vYrWyJtw9drrprNU"/>
+                    {googleLoading ? "Loading..." : "Login with Google"}
+                  </button>
+                  
+                  <button
+                    onClick={() => setShowEmailLogin(true)}
+                    className="flex items-center justify-center gap-2 px-8 py-4 bg-surface-container-high text-on-surface rounded-full text-label-md hover:bg-surface-container-highest active:scale-95 transition-all"
+                  >
+                    <span className="material-symbols-outlined">mail</span>
+                    Email Login
+                  </button>
+                </div>
+              )}
 
-          <h1 className="text-2xl font-semibold text-white mb-1">Selamat datang</h1>
-          <p className="text-gray-500 text-sm mb-8">Masuk untuk melanjutkan perjalananmu</p>
-
-          {/* Error */}
-          {error && (
-            <div className="mb-5 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
-              {error}
-            </div>
-          )}
-
-          {/* Google */}
-          <button
-            onClick={handleGoogle}
-            disabled={googleLoading || loading}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl
-              bg-white/5 border border-white/10 text-white text-sm font-medium
-              hover:bg-white/10 hover:border-white/20 transition-all duration-200
-              disabled:opacity-50 disabled:cursor-not-allowed mb-6"
-          >
-            {googleLoading ? (
-              <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <GoogleIcon />
-            )}
-            Masuk dengan Google
-          </button>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-gray-600 text-xs">atau</span>
-            <div className="flex-1 h-px bg-white/10" />
-          </div>
-
-          {/* Email form */}
-          <form onSubmit={handleEmail} className="space-y-4">
-            <div>
-              <label className="block text-xs text-gray-400 mb-1.5 font-medium">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="kamu@email.com"
-                required
-                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10
-                  text-white text-sm placeholder-gray-600
-                  focus:outline-none focus:border-[#1D9E75]/50 focus:bg-white/8
-                  transition-all duration-200"
-              />
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs text-gray-400 font-medium">Password</label>
-              </div>
-              <div className="relative">
-                <input
-                  type={showPw ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  className="w-full px-4 py-3 pr-11 rounded-xl bg-white/5 border border-white/10
-                    text-white text-sm placeholder-gray-600
-                    focus:outline-none focus:border-[#1D9E75]/50 focus:bg-white/8
-                    transition-all duration-200"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
-                >
-                  <EyeIcon show={showPw} />
-                </button>
+              <div className="flex items-center gap-6 pt-4">
+                <div className="flex -space-x-3">
+                  <img alt="User" className="w-10 h-10 rounded-full border-2 border-background object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVWbwr_JHyMf0tLR1Nh44wGjo3GUGjbEHF7SNoGcslQfTlz6uvuhOp4dCfx6XALGGN_J3fi95X9OwWT8ZhY2CVD868Bd7G6JOv3c8CKM8reI_EH-KVqVDcLIT-Z8gnfLe3ef-_zhqtyo_n4i83MBCS5c7tRePDBSbMdp-cTRJz-zftNaVEJoPkCd2zervssg49S_3eVdp8bVe4EpycJtVx8vZbj4e68GlzLzQpMcjfYc3JEyYycDlqz8V1OjpLGNCZA0OjPvSAJ5Q5"/>
+                  <img alt="User" className="w-10 h-10 rounded-full border-2 border-background object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBScacxi_8Gtd49IjzreqqkVUioxgB4G3K2sECtFLLLh560ZPhCRnl7BN4W-OWUxH9U-4r6C5bnBIXiYRnS7KR6-xygYp6QZjL0ccj_GELhExfsVweX6bnQe9YfLZUXKVFxHILD5lfcOVjKdu_nF594WlJUZt7l5W-_H_01iks5rAvq4fTS67KCo87HJpZY5vFCVyN4t82h9Ram-QyivRPmd_UcuPAOlmDHRgWt7ARlltKU1ioT6-XHkXP8ARO-dRGCT3PhNVNsHPDB"/>
+                  <img alt="User" className="w-10 h-10 rounded-full border-2 border-background object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWbtb869HFkjFDBBkVUizlNlOUvCIJnJ1maGKQ0u2u5UPQ91ia4Ax_HqcDwbtIG-WTN_HfE9ikhWY-3XGSxFKHHU3P6S8TwFCUzDUokNvjSOJUA7YaYfvEwcPcg74qCfGBCyTaGZgZcO9-H2Qn9ZWYZYHN9oK4FXyVBKGZjhV9JQdgKEwz_xwn0WBpvzSC2kILLlqnQh062_j7GNgSab73GXz6go5ImTIlbFHZtVQH3gghKSXDr_7aFaaj7cMnGlSRTcpthRl8TseA"/>
+                </div>
+                <p className="text-label-md text-on-surface-variant">Join <span className="text-primary font-bold">12,000+</span> seekers</p>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading || googleLoading}
-              className="w-full py-3 rounded-xl bg-[#1D9E75] hover:bg-[#18896A]
-                text-white font-semibold text-sm tracking-wide
-                transition-all duration-200 active:scale-[0.98]
-                disabled:opacity-50 disabled:cursor-not-allowed
-                flex items-center justify-center gap-2 mt-2"
-            >
-              {loading ? (
-                <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-              ) : "Masuk"}
-            </button>
-          </form>
+            {/* Right Column */}
+            <div className="relative order-first lg:order-last">
+              <div className="aspect-square rounded-[40px] overflow-hidden soft-shadow bg-surface-container">
+                <img alt="Mindful Morning" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBexxiyRbXWlmaj1hoidkj9-uQly1kEoEcTPFB51BzMq6n3gBxi6dn7u2HHCRxo2eobSkTRl5415GGKfrSZlcSNo5O5DVx_NCAGI74WIZ3a1Tg8zxZMkzW7nhlp-SWkQTLsSPAdDLWJM8qLuq224_mKo6fW9GmyB9m1Yp5Afj45uPtNqfUDgQvO7IaLWYAWZw_WDIRrjV4JLfEHCtH_pFKWTMkkB5stVmM7ParyXYazPcfriiie8cdwmvvJ46Bb3yi13VIQ0Cdx3Hil"/>
+              </div>
+              
+              {/* Floating Data Card */}
+              <div className="absolute -bottom-6 -left-6 glass-card p-6 rounded-2xl soft-shadow border border-white/40 hidden sm:block animate-[bounce-slow_4s_ease-in-out_infinite]">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
+                    <span className="material-symbols-outlined text-on-primary-container">favorite</span>
+                  </div>
+                  <div>
+                    <div className="text-[10px] font-medium text-on-surface-variant uppercase tracking-tighter">Heart Rate</div>
+                    <div className="text-headline-md font-bold text-primary">72 BPM</div>
+                  </div>
+                </div>
+                <div className="h-8 flex items-end gap-1">
+                  <div className="w-1 bg-primary/20 h-4 rounded-full"></div>
+                  <div className="w-1 bg-primary/40 h-6 rounded-full"></div>
+                  <div className="w-1 bg-primary h-8 rounded-full"></div>
+                  <div className="w-1 bg-primary/60 h-5 rounded-full"></div>
+                  <div className="w-1 bg-primary/30 h-3 rounded-full"></div>
+                </div>
+              </div>
+            </div>
 
-          <p className="text-center text-gray-600 text-sm mt-6">
-            Belum punya akun?{" "}
-            <Link to="/register" className="text-[#1D9E75] hover:text-[#25c98f] font-medium transition-colors">
-              Daftar sekarang
-            </Link>
-          </p>
-        </div>
-      </div>
+          </div>
+        </section>
+
+        {/* Value Propositions */}
+        <section className="px-container-padding py-section-margin max-w-6xl mx-auto mt-16">
+          <h2 className="text-headline-lg text-center mb-12">Designed for your <span className="text-primary">well-being</span></h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-card-gap">
+            <div className="md:col-span-2 bg-surface-container-low p-8 rounded-[32px] flex flex-col justify-between hover:bg-surface-container transition-colors">
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-secondary-fixed flex items-center justify-center mb-6">
+                  <span className="material-symbols-outlined text-secondary">spa</span>
+                </div>
+                <h3 className="text-headline-md mb-2">Absolute Simplicity</h3>
+                <p className="text-body-md text-on-surface-variant max-w-md">No complicated tracking systems or overwhelming data. Just tap and grow. Our interface is designed to breathe with you.</p>
+              </div>
+              <div className="mt-8 flex gap-4 overflow-hidden">
+                <div className="px-6 py-3 bg-white rounded-full text-label-md soft-shadow">Meditation</div>
+                <div className="px-6 py-3 bg-white rounded-full text-label-md soft-shadow">Hydration</div>
+                <div className="px-6 py-3 bg-white rounded-full text-label-md soft-shadow">Walking</div>
+              </div>
+            </div>
+            
+            <div className="bg-primary text-on-primary p-8 rounded-[32px] flex flex-col justify-between items-center text-center">
+              <div className="w-12 h-12 rounded-2xl bg-on-primary/10 flex items-center justify-center mb-6">
+                <span className="material-symbols-outlined">volunteer_activism</span>
+              </div>
+              <div>
+                <h3 className="text-headline-md mb-2 text-white">Always Free</h3>
+                <p className="text-label-md font-medium opacity-80">Health should never be gated. All core features are free, forever.</p>
+              </div>
+              <div className="mt-8 text-display-lg leading-none">$0</div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <style>{`
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(-5px); }
+          50% { transform: translateY(5px); }
+        }
+      `}</style>
     </div>
   );
 }
