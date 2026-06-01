@@ -11,10 +11,19 @@ export default function HabitCard({ habit }) {
     <div className="flex items-center justify-between p-6 rounded-2xl bg-surface-container-lowest soft-shadow border border-surface-variant hover:border-outline-variant transition-colors animate-fade-in group">
       <div className="flex items-center gap-4">
         <div 
-          className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
-          style={{ backgroundColor: `${habit.color}15`, color: habit.color }}
+          className="w-12 h-12 rounded-xl flex items-center justify-center"
+          style={{ backgroundColor: `${habit.color}20`, color: habit.color }}
         >
-          {habit.icon || '📌'}
+          {habit.icon && /^[a-z_]+$/.test(habit.icon) ? (
+            <span
+              className="material-symbols-outlined"
+              style={{ fontVariationSettings: "'FILL' 1", fontSize: "24px", color: habit.color }}
+            >
+              {habit.icon}
+            </span>
+          ) : (
+            <span className="text-2xl">{habit.icon || '📌'}</span>
+          )}
         </div>
         <div>
           <div className="flex items-center gap-2">

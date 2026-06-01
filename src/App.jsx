@@ -4,6 +4,8 @@ import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Stats from "./pages/Stats";
+import Habits from "./pages/Habits";
 import AddHabit from "./pages/AddHabit";
 import EditHabit from "./pages/EditHabit";
 import Profile from "./pages/Profile";
@@ -64,6 +66,8 @@ export default function App() {
           }
         >
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/stats" element={<Stats />} />
+          <Route path="/habits" element={<Habits />} />
           <Route path="/habit/new" element={<AddHabit />} />
           <Route path="/habit/:id/edit" element={<EditHabit />} />
           <Route path="/profile" element={<Profile />} />

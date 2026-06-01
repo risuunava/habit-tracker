@@ -3,18 +3,18 @@ import { useAuthState } from "../hooks/useAuth";
 import { useHabits } from "../hooks/useHabits";
 import HabitCard from "../components/HabitCard";
 
-export default function Dashboard() {
+export default function Habits() {
   const { user } = useAuthState();
-  const { habits, globalStats } = useHabits();
+  const { habits } = useHabits();
 
   const activeHabits = habits.filter(h => !h.isArchived);
 
   return (
-    <div className="font-body-md text-on-surface bg-background pb-32">
+    <div className="font-body-md text-on-surface bg-background pb-32 min-h-screen">
       {/* Top Header */}
       <header className="fixed top-0 w-full md:w-[calc(100%-16rem)] lg:w-[calc(100%-16rem)] z-50 bg-background/80 backdrop-blur-xl flex justify-between items-center px-container-padding py-4">
         <div className="flex items-center gap-4">
-          <h1 className="font-headline-md text-headline-md font-bold text-primary">Habit Tracker</h1>
+          <h1 className="font-headline-md text-headline-md font-bold text-primary">All Habits</h1>
         </div>
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
@@ -30,14 +30,10 @@ export default function Dashboard() {
       </header>
       
       <main className="pt-24 max-w-5xl mx-auto px-container-padding w-full flex flex-col relative">
-        {/* Hero Header */}
         <section className="mb-section-margin flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <span className="font-label-md text-label-md px-3 py-1 bg-surface-container-high rounded-full text-on-surface-variant">Today's Focus</span>
-            </div>
-            <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Hello, {user?.displayName?.split(" ")[0] || "there"}!</h2>
-            <p className="text-on-surface-variant max-w-md">Let's complete your daily goals and maintain that {globalStats.currentStreak}-day streak.</p>
+            <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Manage Habits</h2>
+            <p className="text-on-surface-variant max-w-md">View and edit all your active and archived habits.</p>
           </div>
           <div className="flex gap-3">
             <Link to="/habit/new" className="flex-1 md:flex-none px-6 py-3 rounded-full bg-primary text-on-primary font-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity active:scale-95 shadow-sm">
@@ -47,27 +43,8 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* Quick Action Card (VIZ-03) */}
-        {activeHabits.length > 0 && (
-          <div className="bg-primary rounded-3xl p-container-padding text-on-primary flex flex-col justify-between relative overflow-hidden mb-12 shadow-[0_4px_20px_0_rgba(15,82,56,0.3)] animate-fade-in">
-            {/* Abstract Decoration */}
-            <div className="absolute -right-10 -top-10 w-40 h-40 bg-on-primary-container rounded-full opacity-10 blur-3xl"></div>
-            <div>
-              <h4 className="font-headline-md text-headline-md mb-2">Feeling Mindful?</h4>
-              <p className="opacity-90 font-body-md mb-6">Log today's progress to maintain your momentum.</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link to="/habits" className="bg-on-primary text-primary px-8 py-4 rounded-full font-bold flex items-center gap-2 active:scale-95 transition-transform">
-                <span className="material-symbols-outlined">format_list_bulleted</span>
-                View All Habits
-              </Link>
-            </div>
-          </div>
-        )}
-
         {/* Habits List */}
         <div className="mb-6">
-          <h3 className="font-headline-md text-headline-md mb-4 text-on-surface">Today's Habits</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-card-gap">
             {activeHabits.length === 0 ? (
               <div className="md:col-span-2 lg:col-span-3 text-center py-16 px-6 rounded-3xl bg-surface-container-low border border-dashed border-outline-variant mt-4 animate-fade-in">

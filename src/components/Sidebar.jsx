@@ -5,15 +5,15 @@ export default function Sidebar() {
 
   const navItems = [
     { path: "/dashboard", icon: "home", label: "Home" },
-    { path: "#", icon: "analytics", label: "Stats" },
-    { path: "#", icon: "format_list_bulleted", label: "Habits" },
+    { path: "/stats", icon: "analytics", label: "Stats" },
+    { path: "/habits", icon: "format_list_bulleted", label: "Habits" },
     { path: "/profile", icon: "person", label: "Profile" }
   ];
 
   return (
     <aside className="hidden md:flex flex-col w-64 h-screen fixed left-0 top-0 bg-surface-container-lowest border-r border-surface-container z-40">
       <div className="p-6 pt-10">
-        <h1 className="font-headline-lg text-headline-md font-bold text-primary mb-12">Daily Mindset</h1>
+        <h1 className="font-headline-lg text-headline-md font-bold text-primary mb-12">Habit Tracker</h1>
         
         <nav className="flex flex-col gap-2">
           {navItems.map((item) => {

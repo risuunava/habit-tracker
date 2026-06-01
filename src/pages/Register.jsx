@@ -5,9 +5,11 @@ import { registerWithEmail, loginWithGoogle } from "../hooks/useAuth";
 function CheckItem({ text, ok }) {
   return (
     <div className={`flex items-center gap-2 text-label-sm transition-colors duration-200 ${ok ? "text-primary" : "text-on-surface-variant"}`}>
-      <div className={`w-4 h-4 rounded-full flex items-center justify-center transition-all duration-200 ${ok ? "bg-primary text-on-primary" : "border border-outline"}`}>
+      <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 ${ok ? "bg-primary" : "border border-outline"}`}>
         {ok && (
-          <span className="material-symbols-outlined text-[12px] font-bold">check</span>
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-2.5 h-2.5">
+            <path d="M2 6l3 3 5-5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         )}
       </div>
       {text}
@@ -89,7 +91,7 @@ export default function Register() {
     <div className="font-body-md text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed overflow-x-hidden min-h-screen">
       {/* Top Navigation */}
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl flex justify-between items-center px-container-padding py-4">
-        <div className="text-headline-md font-bold text-primary">Daily Mindset</div>
+        <div className="text-headline-md font-bold text-primary">Habit Tracker</div>
         <div className="flex items-center gap-4">
           <Link to="/login" className="px-6 py-2 bg-surface-container-high text-on-surface rounded-full text-label-md hover:bg-surface-container-highest transition-colors font-bold">
             Masuk
@@ -184,9 +186,16 @@ export default function Register() {
                   <button
                     onClick={handleGoogle}
                     disabled={googleLoading || loading}
-                    className="flex items-center justify-center gap-3 px-8 py-4 bg-primary text-on-primary rounded-full text-label-md hover:brightness-110 active:scale-95 transition-all soft-shadow shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
+                    className="flex items-center justify-center gap-3 px-8 py-4 bg-primary text-on-primary rounded-full text-label-md hover:brightness-110 active:scale-95 transition-all soft-shadow"
                   >
-                    <img alt="Google" className="w-5 h-5 bg-white rounded-full p-0.5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ04XAuUvckcAXQYXelWO18C04ot2Wbx0Ta-mn8kpeO29N5sM97h5T-Hp0tHpIZSSR58BzS8ne9rkzISkAOxuvtsbjrXIGpblwrvmeNMyD-szJBrL50z1a1GxVA4Hp6h-RdVs4iMJk5O4I4-Mxv42p4k-sEKI7MgetDMS5FYi5jRQyHuFBi3Lh1uuyLDb7CWbY9UGk0c1oGQggndYPzCpoRjBZt6uwwa6WlFwt52Byj1sw79_u4tg1I-5wqvJ9vYrWyJtw9drrprNU"/>
+                    <span className="w-5 h-5 flex-shrink-0 bg-white rounded-full flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="w-3.5 h-3.5">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                      </svg>
+                    </span>
                     {googleLoading ? "Loading..." : "Daftar dengan Google"}
                   </button>
                   

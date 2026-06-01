@@ -7,7 +7,7 @@ export default function Profile() {
     <div className="font-body-md text-on-background pb-32 max-w-2xl mx-auto w-full">
       {/* TopAppBar */}
       <header className="fixed top-0 w-full md:w-[calc(100%-16rem)] lg:w-[calc(100%-16rem)] max-w-2xl z-50 bg-background/80 backdrop-blur-xl flex justify-between items-center px-container-padding py-4">
-        <h1 className="font-headline-md text-headline-md font-bold text-primary">Daily Mindset</h1>
+        <h1 className="font-headline-md text-headline-md font-bold text-primary">Habit Tracker</h1>
         <div className="flex items-center gap-4">
           <button className="material-symbols-outlined text-primary hover:bg-surface-container-low transition-colors p-2 rounded-full active:scale-95 transition-transform">
             notifications
@@ -168,7 +168,7 @@ export default function Profile() {
         
         {/* Footer / Version */}
         <footer className="text-center py-8">
-          <p className="text-label-sm text-on-surface-variant opacity-60">Daily Mindset v2.4.0</p>
+          <p className="text-label-sm text-on-surface-variant opacity-60">Habit Tracker v2.4.0</p>
           <p className="text-label-sm text-on-surface-variant opacity-40 mt-1">Nurturing your journey to a better self.</p>
         </footer>
       </main>

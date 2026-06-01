@@ -42,7 +42,7 @@ export default function AddHabit() {
   };
 
   return (
-    <div className="font-body-md text-on-surface pb-32">
+    <div className="font-body-md text-on-surface">
       {/* TopAppBar */}
       <header className="fixed top-0 w-full md:w-[calc(100%-16rem)] lg:w-[calc(100%-16rem)] max-w-2xl z-50 bg-background/80 backdrop-blur-xl flex justify-between items-center px-container-padding py-4">
         <div className="flex items-center gap-3">
@@ -62,7 +62,7 @@ export default function AddHabit() {
         </div>
       </header>
 
-      <main className="pt-24 px-container-padding max-w-2xl mx-auto">
+      <main className="pt-24 px-container-padding max-w-2xl mx-auto pb-32">
         <form onSubmit={handleSubmit} className="space-y-section-margin">
           
           {/* Habit Name Field */}
@@ -155,16 +155,15 @@ export default function AddHabit() {
             </div>
           </div>
 
-          {/* Fixed Bottom Action */}
-          <div className="fixed bottom-0 left-0 w-full md:w-[calc(100%-16rem)] lg:w-[calc(100%-16rem)] md:left-64 p-container-padding bg-background/80 backdrop-blur-xl z-50">
-            <button
-              type="submit"
-              disabled={loading || !name.trim()}
-              className="w-full max-w-2xl mx-auto py-4 bg-primary text-on-primary rounded-full font-headline-md text-headline-md shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform hover:bg-primary-container disabled:opacity-50 flex items-center justify-center"
-            >
-              {loading ? "Saving..." : "Save Habit"}
-            </button>
-          </div>
+          {/* Inline Submit Button */}
+          <button
+            type="submit"
+            disabled={loading || !name.trim()}
+            className="w-full py-4 bg-primary text-on-primary rounded-2xl font-label-md text-label-md shadow-md shadow-primary/20 active:scale-[0.98] transition-all hover:opacity-90 disabled:opacity-40 flex items-center justify-center gap-2"
+          >
+            <span className="material-symbols-outlined text-[20px]">check_circle</span>
+            {loading ? "Saving..." : "Save Habit"}
+          </button>
         </form>
       </main>
     </div>
