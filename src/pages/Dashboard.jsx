@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuthState } from "../hooks/useAuth";
 import { useHabits } from "../hooks/useHabits";
-import Navbar from "../components/Navbar";
 import HabitCard from "../components/HabitCard";
 
 export default function Dashboard() {
@@ -38,9 +37,9 @@ export default function Dashboard() {
   const maxWeekly = Math.max(...globalStats.weeklyActivity, 1); // prevent division by zero
 
   return (
-    <div className="min-h-screen font-body-md text-on-surface bg-background pb-32">
+    <div className="font-body-md text-on-surface bg-background pb-32">
       {/* Top Header */}
-      <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl flex justify-between items-center px-container-padding py-4 w-full">
+      <header className="fixed top-0 w-full md:w-[calc(100%-16rem)] lg:w-[calc(100%-16rem)] z-50 bg-background/80 backdrop-blur-xl flex justify-between items-center px-container-padding py-4">
         <div className="flex items-center gap-4">
           <h1 className="font-headline-md text-headline-md font-bold text-primary">Daily Mindset</h1>
         </div>
@@ -208,8 +207,6 @@ export default function Dashboard() {
         </div>
 
       </main>
-
-      <Navbar />
     </div>
   );
 }

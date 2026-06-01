@@ -117,5 +117,17 @@ export function useHabits() {
     }
   }
 
-  return { habits, checkIn, addHabit, globalStats }
+  async function updateHabit(habitId, data) {
+    if (!uid) throw new Error("User not authenticated")
+    const habitRef = doc(db, 'users', uid, 'habits', habitId)
+    await updateDoc(habitRef, data)
+  }
+
+  async function deleteHabit(habitId) {
+    if (!uid) throw new Error("User not authenticated")
+    const habitRef = doc(db, 'users', uid, 'habits', habitId)
+    await deleteDoc(habitRef)
+  }
+
+  return { habits, checkIn, addHabit, updateHabit, deleteHabit, globalStats }
 }

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useHabits } from "../hooks/useHabits";
 import { useAuthState } from "../hooks/useAuth";
 
@@ -13,9 +13,10 @@ const COLORS = [
   { name: "sand", hex: "#F2CC8F" }
 ];
 
-export default function AddHabit() {
+export default function EditHabit() {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { addHabit } = useHabits();
+  const { habits, updateHabit, deleteHabit } = useHabits();
   const { user } = useAuthState();
   
   const [name, setName] = useState("");
@@ -24,6 +25,18 @@ export default function AddHabit() {
   const [frequency, setFrequency] = useState("daily");
   
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  useEffect(() => {
+    const habit = habits.find(h => h.id === id);
+    if (habit) {
+      setName(habit.name);
+      setIcon(habit.icon || ICONS[0]);
+      setColorHex(habit.color || COLORS[0].hex);
+      setFrequency(habit.frequency || "daily");
+    }
+  }, [id, habits]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,13 +44,26 @@ export default function AddHabit() {
 
     try {
       setLoading(true);
-      await addHabit({ name, icon, color: colorHex, frequency });
+      await updateHabit(id, { name, icon, color: colorHex, frequency });
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      alert("Gagal menambahkan kebiasaan");
+      alert("Gagal mengubah kebiasaan");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      setDeleteLoading(true);
+      await deleteHabit(id);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
+      alert("Gagal menghapus kebiasaan");
+      setDeleteLoading(false);
+      setShowConfirm(false);
     }
   };
 
@@ -49,7 +75,7 @@ export default function AddHabit() {
           <Link to="/dashboard" className="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-95">
             <span className="material-symbols-outlined text-primary">arrow_back</span>
           </Link>
-          <h1 className="font-headline-md text-headline-md font-bold text-primary">Add Habit</h1>
+          <h1 className="font-headline-md text-headline-md font-bold text-primary">Edit Habit</h1>
         </div>
         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
           {user?.photoURL ? (
@@ -139,20 +165,38 @@ export default function AddHabit() {
             </div>
           </div>
 
-          {/* Goal Setting */}
-          <div className="space-y-3">
-            <div className="flex justify-between items-center px-1">
-              <label className="font-label-md text-label-md text-on-surface-variant uppercase">Daily Goal</label>
-              <span className="font-label-sm text-label-sm text-primary font-bold">1 Session</span>
-            </div>
-            <div className="bg-surface-container-low p-6 rounded-xl space-y-4">
-              <input type="range" min="1" max="10" defaultValue="1" className="w-full h-2 bg-surface-variant rounded-full appearance-none cursor-pointer accent-primary" />
-              <div className="flex justify-between font-label-sm text-on-surface-variant/60">
-                <span>1</span>
-                <span>5</span>
-                <span>10</span>
+          {/* Delete Action */}
+          <div className="pb-16 pt-4 border-t border-surface-variant text-center">
+            {!showConfirm ? (
+              <button 
+                type="button"
+                onClick={() => setShowConfirm(true)}
+                className="text-error font-label-md py-2 px-6 hover:bg-error-container rounded-full transition-colors"
+              >
+                Delete Habit
+              </button>
+            ) : (
+              <div className="bg-error-container text-on-error-container p-6 rounded-2xl">
+                <p className="font-label-md mb-4">Are you sure you want to delete this habit?</p>
+                <div className="flex justify-center gap-4">
+                  <button 
+                    type="button"
+                    onClick={() => setShowConfirm(false)}
+                    className="px-6 py-2 bg-surface text-on-surface rounded-full font-label-sm hover:brightness-95 transition-all shadow-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={handleDelete}
+                    disabled={deleteLoading}
+                    className="px-6 py-2 bg-error text-on-error rounded-full font-label-sm hover:brightness-90 transition-all shadow-sm flex items-center justify-center min-w-[120px]"
+                  >
+                    {deleteLoading ? <span className="material-symbols-outlined animate-spin text-[16px]">refresh</span> : "Yes, Delete"}
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Fixed Bottom Action */}
@@ -162,7 +206,7 @@ export default function AddHabit() {
               disabled={loading || !name.trim()}
               className="w-full max-w-2xl mx-auto py-4 bg-primary text-on-primary rounded-full font-headline-md text-headline-md shadow-lg shadow-primary/20 active:scale-[0.98] transition-transform hover:bg-primary-container disabled:opacity-50 flex items-center justify-center"
             >
-              {loading ? "Saving..." : "Save Habit"}
+              {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>
